@@ -24,6 +24,8 @@ Vagrant.configure("2") do |config|
     config.vm.box = settings["software"]["box"]
   end
   config.vm.box_check_update = true
+  #https://askubuntu.com/questions/317338/how-can-i-increase-disk-size-on-a-vagrant-vm
+  config.disksize.size = settings["nodes"]["disk"]
 
   config.vm.define "master" do |master|
     master.vm.hostname = "master-node"
