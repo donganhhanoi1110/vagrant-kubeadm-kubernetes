@@ -88,6 +88,7 @@ magnoliaPublic:
       name: activation-key
       key: activation-secret
   persistence:
+    storageClassName: longhorn-storage-retain
     size: "5Gi"
   db:
     enabled: True
