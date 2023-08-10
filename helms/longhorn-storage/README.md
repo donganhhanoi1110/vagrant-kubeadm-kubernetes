@@ -6,21 +6,24 @@ helm pull longhorn/longhorn --version 1.2.2
 tar -xzf longhorn-1.2.2.tgz
 
 #copy to our own file
-cp longhorn/values.yaml values-longhorn.yaml
+- cp longhorn/values.yaml values-longhorn.yaml
 #Make sure on worker node you run:
-sudo apt install open-iscsi
+- sudo apt install open-iscsi
 
-#apply and install longhorn storage with our custom values.
-helm install longhorn-storage -f values-longhorn.yaml longhorn --namespace storage
+# apply and install longhorn storage with our custom values.
+- helm install longhorn-storage -f values-longhorn.yaml longhorn --namespace storage
 
-#install storage class with 2 reclaim Policy
-kubectl apply -f longhorn-storage-class-delete.yaml
-kubectl apply -f longhorn-storage-class-retain.yaml
+# install storage class with 2 reclaim Policy
+- kubectl apply -f longhorn-storage-class-delete.yaml
+- kubectl apply -f longhorn-storage-class-retain.yaml
 
-#install pvc with 2 reclaimPolicy
-k apply -f longhorn-pvc-delete.yaml
-k apply -f longhorn-pvc-retain.yaml
+# install pvc with 2 reclaimPolicy
+- k apply -f longhorn-pvc-delete.yaml
+- k apply -f longhorn-pvc-retain.yaml
 
-#apply pod to test the volume and pvc
-k apply -f test-pod-longhorn-retain.yaml
-k apply -f test-pod-longhorn-delete.yaml
+# apply pod to test the volume and pvc
+1. k apply -f test-pod-longhorn-retain.yaml
+2. k apply -f test-pod-longhorn-delete.yaml
+
+# In case we want to change the default storage class
+kubectl patch storageclass <<storageClassName>> -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
