@@ -32,6 +32,9 @@ grafana:
 ##
 prometheus:
   ingress:
+    ## If true, Grafana Ingress will be created
+    ##
+    enabled: true
     ## Hostnames.
     ## Must be provided if Ingress is enabled.
     ##
