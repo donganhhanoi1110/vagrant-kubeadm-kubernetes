@@ -1,0 +1,37 @@
+## Configuration for alertmanager
+## ref: https://prometheus.io/docs/alerting/alertmanager/
+##
+alertmanager:
+  ingress:
+    enabled: true
+    ## Hosts must be provided if Ingress is enabled.
+    ##
+    hosts:
+      - alertmanager.monitor.maxxx.dev
+
+## Using default values from https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
+##
+grafana:
+  ingress:
+    ## If true, Grafana Ingress will be created
+    ##
+    enabled: true
+    ## Hostnames.
+    ## Must be provided if Ingress is enable.
+    ##
+    # hosts:
+    #   - grafana.domain.com
+    hosts:
+      - grafana.monitor.maxxx.dev
+
+## Deploy a Prometheus instance
+##
+prometheus:
+  ingress:
+    ## Hostnames.
+    ## Must be provided if Ingress is enabled.
+    ##
+    # hosts:
+    #   - prometheus.domain.com
+    hosts:
+      - prometheus.monitor.maxxx.dev
