@@ -1,0 +1,24 @@
+service:
+  ui:
+    #type: ClusterIP
+    type: NodePort
+    nodePort: 30888
+  manager:
+    type: ClusterIP
+
+defaultDataPath: /data/longhorn-storage/
+replicaSoftAntiAffinity: true
+storageMinimalAvailablePercentage: 15
+upgradeChecker: false
+defaultReplicaCount: 2
+backupstorePollInterval: 500
+nodeDownPodDeletionPolicy: do-nothing
+guaranteedEngineManagerCPU: 15
+guaranteedReplicaManagerCPU: 15
+
+ingress:
+  enabled: true
+  ingressClassName: longhorn-storage-ingress
+  host: longhorn-ui.maxxx.dev
+
+namespaceOverride: "storage"
