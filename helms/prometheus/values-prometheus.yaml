@@ -8,6 +8,8 @@ alertmanager:
     ##
     hosts:
       - alertmanager.monitor.maxxx.dev
+    paths:
+      - /    
 
 ## Using default values from https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
 ##
@@ -23,6 +25,8 @@ grafana:
     #   - grafana.domain.com
     hosts:
       - grafana.monitor.maxxx.dev
+    paths:
+      - /  
 
 ## Deploy a Prometheus instance
 ##
@@ -35,3 +39,5 @@ prometheus:
     #   - prometheus.domain.com
     hosts:
       - prometheus.monitor.maxxx.dev
+    paths:
+      - /    
