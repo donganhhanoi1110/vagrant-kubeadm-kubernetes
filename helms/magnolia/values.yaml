@@ -1,0 +1,237 @@
+image:
+  tomcat:
+    # -- The tomcat image we're going to use.
+    repository: tomcat
+    # -- Tomcat repo tag.
+    tag: 9.0-jre11-temurin
+    # -- Tomcat repo pull policy.
+    pullPolicy: IfNotPresent
+  redirects:
+    repository: registry.gitlab.com/mironet/redirects
+    # -- Tomcat repo tag.
+    tag: v0.3-mainline
+    # -- Tomcat repo pull policy.
+    pullPolicy: IfNotPresent
+  pullSecrets: []
+  pullPolicy: Always
+nameOverride: ""
+fullnameOverride: ""
+
+# -- Timezone for Magnolia.
+timezone: Asia/Ho_Chi_Minh
+
+deploy:
+  extraLibs: /usr/local/tomcat/lib2
+  # -- Deploy into this directory innside the app server container.
+  directory: /usr/local/tomcat/webapps
+  tempDir: /usr/local/tomcat/temp
+  securityContext:
+    # -- Run application pod under this user ID. **Note:** Do not use a
+    # privileged user here.
+    runAsUser: 1000
+    # -- Group ID.
+    runAsGroup: 1000
+    # -- Fixup file permissions for volumes mounted to the Magnolia pod.
+    fsGroup: 1000
+
+bootstrap:
+  # -- Do enable bootstrapping via REST.
+  enabled: false
+
+magnoliaAuthor:
+  enabled: false
+
+magnoliaPublic:
+  env:
+    - name: magnolia.superuser.enabled
+      value: "true"
+    - name: magnolia.superuser.password
+      value: bootstrapPwd123
+  enabled: True # -- Set to false if you don't need any public instances.
+  restartPolicy: Always # Always use a leading slash.
+  redeploy: true
+  contextPath: /
+  webarchive:
+    repository: "registry.gitlab.com/mironet/magnolia-demo"
+    # -- Do not use 'latest' in production.
+    tag: "latest"
+  extraContainers: []
+  extraInitContainers: []
+  rescueMode: False
+  rescueModeDX: False
+  stateful: True # Do not change this.
+  replicas: 1
+  strategy:
+    type: Recreate
+  catalinaExtraEnv: {}
+  setenv:
+    memory:
+      minPercentage: 25
+      maxPercentage: 60
+    update:
+      auto: "true"
+  resources:
+    requests:
+      memory: 2Gi
+    limits:
+      memory: 2Gi
+  logging:
+    level: INFO
+    pattern: "%d %-5p %-50.50c: %m%n"
+  bootstrap:
+    password: "bootstrapPwd123"
+  redirects:
+    enabled: False
+  activation:
+    useExistingSecret: True
+    secret:
+      name: activation-key
+      key: activation-secret
+  persistence:
+    size: "5Gi"
+  db:
+    enabled: True
+    repository: postgres
+    tag: 11.9-alpine
+    type: postgres
+    name: public
+    persistence:
+      size: "5Gi"
+    jackrabbit:
+      autoRepair: True
+      enableConsistencyCheck: False
+      forceConsistencyCheck: False
+      onWorkspaceInconsistency: log
+      extraSearchIndexParameters: {}
+    backup:
+      enabled: False
+    restore:
+      enabled: False
+    podAnnotations: {}
+    contentsync:
+      enabled: false
+      address: ":9998"
+  livenessProbe:
+    enabled: True
+    failureThreshold: 4
+    periodSeconds: 10
+    expectedCodes: "200-399,401,404"
+    path: "/.rest/status"
+  podAnnotations: {}
+  jndiResources: []
+  tomcat:
+    logArgs: False
+    activateWebsockets: False
+    maxHttpHeaderSize: 8192
+    error:
+      showReport: False
+      showServerInfo: False
+  podDistributionBudget:
+    enabled: False
+
+
+# Additional jars which should be loaded into tomcat can be specified here.
+jars:
+  - name: postgres-jdbc
+    # -- Example of additional jar, here the Postgres JDBC driver.
+    repository: registry.gitlab.com/mironet/magnolia-jar/postgres-42.2.8
+    tag: v0.0.2
+    env:
+      - name: INIT_DEST
+        value: /app/magnolia/WEB-INF/lib
+    # -- Where to find the init script which copies .jar files into tomcat/lib.
+    initScript: /init.sh
+  - name: jmx-exporter
+    repository: registry.gitlab.com/mironet/magnolia-jar/jmx_prometheus_javaagent-0.13.0
+    tag: v0.0.2
+    env:
+      - name: INIT_DEST
+        value: /extraLibs/
+    initScript: /init.sh
+  - name: jjwt-jackson
+    repository: registry.gitlab.com/mironet/magnolia-jar/jjwt-jackson-0.11.2
+    tag: v0.0.2
+    env:
+      - name: INIT_DEST
+        value: /app/magnolia/WEB-INF/lib
+    initScript: /init.sh
+  - name: jjwt-impl
+    repository: registry.gitlab.com/mironet/magnolia-jar/jjwt-impl-0.11.2
+    tag: v0.0.2
+    env:
+      - name: INIT_DEST
+        value: /app/magnolia/WEB-INF/lib
+    initScript: /init.sh
+  - name: jjwt-api
+    repository: registry.gitlab.com/mironet/magnolia-jar/jjwt-api-0.11.2
+    tag: v0.0.2
+    env:
+      - name: INIT_DEST
+        value: /app/magnolia/WEB-INF/lib
+    initScript: /init.sh
+  - name: magnolia-rest-security-core
+    repository: registry.gitlab.com/mironet/magnolia-jar/magnolia-rest-security-core-1.0.3
+    tag: v0.0.2
+    env:
+      - name: INIT_DEST
+        value: /app/magnolia/WEB-INF/lib
+    initScript: /init.sh
+  - name: magnolia-cloud-bootstrapper
+    repository: registry.gitlab.com/mironet/magnolia-jar/magnolia-cloud-bootstrapper-1.0.2
+    tag: v0.0.2
+    env:
+      - name: INIT_DEST
+        value: /app/magnolia/WEB-INF/lib
+    initScript: /init.sh
+
+metrics:
+  enabled: true
+  setPrometheusAnnotations: false
+  metricsServerPort: 8000
+
+service:
+  annotations: {}
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+  redirectPort: 8081
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-body-size: 50m
+    # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  hosts:
+    - host: public-dev.mgnl.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+          instance: public
+          port: http                                                  
+    - host: mgnl-public-dev.maxxn9x.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+          instance: public
+          port: http
+    - host: mgnl.maxxx.dev
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+          instance: public
+          port: http             
+          
+
+postjob:
+  image: registry.gitlab.com/mironet/magnolia-bootstrap
+  tag: v0.5-mainline
+  imagePullPolicy: "IfNotPresent"
+  waitFor: 10m
+
+nodeSelector:
+tolerations:
