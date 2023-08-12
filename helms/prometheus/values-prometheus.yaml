@@ -62,7 +62,7 @@ prometheus:
     paths:
       - /
     tls:
-      - secretName: grafana-cert-tls-staging
+      - secretName: prometheus-cert-tls-staging
         hosts:
           - prometheus.monitor.maxxx.dev  
     annotations:       
