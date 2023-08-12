@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    # add an annotation indicating the issuer to use.
+    cert-manager.io/cluster-issuer: letsencrypt-issuer-staging
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-body-size: 50m  
+  name: magnolia-ingress
+  namespace: dev
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: magnolia.maxxx.dev
+    http:
+      paths:
+      - pathType: ImplementationSpecific
+        path: /
+        backend:
+          service:
+            name: dev-magnolia-helm-public-svc
+            port:
+              name: http
+  tls: # < placing a host in the TLS config will determine what ends up in the cert's subjectAltNames
+  - hosts:
+    - magnolia.maxxx.dev
+    secretName: magnolia-public-dev-cert # < cert-manager will store the created certificate in this secret.

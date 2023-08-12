@@ -1,0 +1,24 @@
+Name:             dev-magnolia-helm
+Labels:           app=dev-magnolia-helm
+                  app.kubernetes.io/managed-by=Helm
+                  chart=magnolia-helm
+                  heritage=Helm
+                  release=dev
+Namespace:        dev
+Address:          10.0.0.96
+Ingress Class:    <none>
+Default backend:  <default>
+Rules:
+  Host                         Path  Backends
+  ----                         ----  --------
+  public-dev.mgnl.com          
+                               /   dev-magnolia-helm-public-svc:http (172.16.158.55:8080)
+  mgnl-public-dev.maxxn9x.com  
+                               /   dev-magnolia-helm-public-svc:http (172.16.158.55:8080)
+  mgnl.maxxx.dev               
+                               /   dev-magnolia-helm-public-svc:http (172.16.158.55:8080)
+Annotations:                   kubernetes.io/ingress.class: nginx
+                               meta.helm.sh/release-name: dev
+                               meta.helm.sh/release-namespace: dev
+                               nginx.ingress.kubernetes.io/proxy-body-size: 50m
+Events:                        <none>

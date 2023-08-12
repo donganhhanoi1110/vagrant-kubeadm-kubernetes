@@ -1,0 +1,180 @@
+Name:             prometheus-prometheus-grafana-stack-k-prometheus-0
+Namespace:        monitoring
+Priority:         0
+Service Account:  prometheus-grafana-stack-k-prometheus
+Node:             worker-node02/10.0.0.12
+Start Time:       Thu, 10 Aug 2023 17:48:45 +0000
+Labels:           app.kubernetes.io/instance=prometheus-grafana-stack-k-prometheus
+                  app.kubernetes.io/managed-by=prometheus-operator
+                  app.kubernetes.io/name=prometheus
+                  app.kubernetes.io/version=2.45.0
+                  controller-revision-hash=prometheus-prometheus-grafana-stack-k-prometheus-7b6cb88796
+                  operator.prometheus.io/name=prometheus-grafana-stack-k-prometheus
+                  operator.prometheus.io/shard=0
+                  prometheus=prometheus-grafana-stack-k-prometheus
+                  statefulset.kubernetes.io/pod-name=prometheus-prometheus-grafana-stack-k-prometheus-0
+Annotations:      cni.projectcalico.org/containerID: 19a89dd539f74df6d388a765040f7002ff7b54c634adc3d1cee8bfba93ce2128
+                  cni.projectcalico.org/podIP: 172.16.158.23/32
+                  cni.projectcalico.org/podIPs: 172.16.158.23/32
+                  kubectl.kubernetes.io/default-container: prometheus
+Status:           Running
+SeccompProfile:   RuntimeDefault
+IP:               172.16.158.23
+IPs:
+  IP:           172.16.158.23
+Controlled By:  StatefulSet/prometheus-prometheus-grafana-stack-k-prometheus
+Init Containers:
+  init-config-reloader:
+    Container ID:  cri-o://9d004672c56f5c8ff2a8c649e3e5cdfd2d81bb6a038062746e4c712063544741
+    Image:         quay.io/prometheus-operator/prometheus-config-reloader:v0.66.0
+    Image ID:      quay.io/prometheus-operator/prometheus-config-reloader@sha256:b7493034219c1465ff84d47dc8a8f337ed15465d1143e6ef3af3ba995d128a5c
+    Port:          8080/TCP
+    Host Port:     0/TCP
+    Command:
+      /bin/prometheus-config-reloader
+    Args:
+      --watch-interval=0
+      --listen-address=:8080
+      --config-file=/etc/prometheus/config/prometheus.yaml.gz
+      --config-envsubst-file=/etc/prometheus/config_out/prometheus.env.yaml
+      --watched-dir=/etc/prometheus/rules/prometheus-prometheus-grafana-stack-k-prometheus-rulefiles-0
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Thu, 10 Aug 2023 17:48:47 +0000
+      Finished:     Thu, 10 Aug 2023 17:48:49 +0000
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     200m
+      memory:  50Mi
+    Requests:
+      cpu:     200m
+      memory:  50Mi
+    Environment:
+      POD_NAME:  prometheus-prometheus-grafana-stack-k-prometheus-0 (v1:metadata.name)
+      SHARD:     0
+    Mounts:
+      /etc/prometheus/config from config (rw)
+      /etc/prometheus/config_out from config-out (rw)
+      /etc/prometheus/rules/prometheus-prometheus-grafana-stack-k-prometheus-rulefiles-0 from prometheus-prometheus-grafana-stack-k-prometheus-rulefiles-0 (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-9vvd8 (ro)
+Containers:
+  prometheus:
+    Container ID:  cri-o://aca41c03c9cb8668a6172cfb11e24b6baf7a15c238acc2c567a6fac4c2980bf8
+    Image:         quay.io/prometheus/prometheus:v2.45.0
+    Image ID:      quay.io/prometheus/prometheus@sha256:377894421d88619dc51dbcd46ceba75a5ea842b0a878f173e6476f20c1645630
+    Port:          9090/TCP
+    Host Port:     0/TCP
+    Args:
+      --web.console.templates=/etc/prometheus/consoles
+      --web.console.libraries=/etc/prometheus/console_libraries
+      --config.file=/etc/prometheus/config_out/prometheus.env.yaml
+      --web.enable-lifecycle
+      --web.external-url=http://prometheus.monitor.maxxx.dev/
+      --web.route-prefix=/
+      --storage.tsdb.retention.time=10d
+      --storage.tsdb.path=/prometheus
+      --storage.tsdb.wal-compression
+      --web.config.file=/etc/prometheus/web_config/web-config.yaml
+    State:          Running
+      Started:      Thu, 10 Aug 2023 17:48:50 +0000
+    Ready:          True
+    Restart Count:  0
+    Liveness:       http-get http://:http-web/-/healthy delay=0s timeout=3s period=5s #success=1 #failure=6
+    Readiness:      http-get http://:http-web/-/ready delay=0s timeout=3s period=5s #success=1 #failure=3
+    Startup:        http-get http://:http-web/-/ready delay=0s timeout=3s period=15s #success=1 #failure=60
+    Environment:    <none>
+    Mounts:
+      /etc/prometheus/certs from tls-assets (ro)
+      /etc/prometheus/config_out from config-out (ro)
+      /etc/prometheus/rules/prometheus-prometheus-grafana-stack-k-prometheus-rulefiles-0 from prometheus-prometheus-grafana-stack-k-prometheus-rulefiles-0 (rw)
+      /etc/prometheus/web_config/web-config.yaml from web-config (ro,path="web-config.yaml")
+      /prometheus from prometheus-prometheus-grafana-stack-k-prometheus-db (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-9vvd8 (ro)
+  config-reloader:
+    Container ID:  cri-o://62c0fcd77a68e77de2f3e500db6a6756ad7ea01b5b37fbffa0aae15b4e2524a4
+    Image:         quay.io/prometheus-operator/prometheus-config-reloader:v0.66.0
+    Image ID:      quay.io/prometheus-operator/prometheus-config-reloader@sha256:b7493034219c1465ff84d47dc8a8f337ed15465d1143e6ef3af3ba995d128a5c
+    Port:          8080/TCP
+    Host Port:     0/TCP
+    Command:
+      /bin/prometheus-config-reloader
+    Args:
+      --listen-address=:8080
+      --reload-url=http://127.0.0.1:9090/-/reload
+      --config-file=/etc/prometheus/config/prometheus.yaml.gz
+      --config-envsubst-file=/etc/prometheus/config_out/prometheus.env.yaml
+      --watched-dir=/etc/prometheus/rules/prometheus-prometheus-grafana-stack-k-prometheus-rulefiles-0
+    State:          Running
+      Started:      Thu, 10 Aug 2023 17:48:51 +0000
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     200m
+      memory:  50Mi
+    Requests:
+      cpu:     200m
+      memory:  50Mi
+    Environment:
+      POD_NAME:  prometheus-prometheus-grafana-stack-k-prometheus-0 (v1:metadata.name)
+      SHARD:     0
+    Mounts:
+      /etc/prometheus/config from config (rw)
+      /etc/prometheus/config_out from config-out (rw)
+      /etc/prometheus/rules/prometheus-prometheus-grafana-stack-k-prometheus-rulefiles-0 from prometheus-prometheus-grafana-stack-k-prometheus-rulefiles-0 (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-9vvd8 (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  config:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  prometheus-prometheus-grafana-stack-k-prometheus
+    Optional:    false
+  tls-assets:
+    Type:                Projected (a volume that contains injected data from multiple sources)
+    SecretName:          prometheus-prometheus-grafana-stack-k-prometheus-tls-assets-0
+    SecretOptionalName:  <nil>
+  config-out:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     Memory
+    SizeLimit:  <unset>
+  prometheus-prometheus-grafana-stack-k-prometheus-rulefiles-0:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      prometheus-prometheus-grafana-stack-k-prometheus-rulefiles-0
+    Optional:  false
+  web-config:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  prometheus-prometheus-grafana-stack-k-prometheus-web-config
+    Optional:    false
+  prometheus-prometheus-grafana-stack-k-prometheus-db:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+  kube-api-access-9vvd8:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  4m23s  default-scheduler  Successfully assigned monitoring/prometheus-prometheus-grafana-stack-k-prometheus-0 to worker-node02
+  Normal  Pulled     3m21s  kubelet            Container image "quay.io/prometheus-operator/prometheus-config-reloader:v0.66.0" already present on machine
+  Normal  Created    3m20s  kubelet            Created container init-config-reloader
+  Normal  Started    3m20s  kubelet            Started container init-config-reloader
+  Normal  Pulled     3m17s  kubelet            Container image "quay.io/prometheus/prometheus:v2.45.0" already present on machine
+  Normal  Created    3m17s  kubelet            Created container prometheus
+  Normal  Started    3m17s  kubelet            Started container prometheus
+  Normal  Pulled     3m17s  kubelet            Container image "quay.io/prometheus-operator/prometheus-config-reloader:v0.66.0" already present on machine
+  Normal  Created    3m16s  kubelet            Created container config-reloader
+  Normal  Started    3m15s  kubelet            Started container config-reloader
