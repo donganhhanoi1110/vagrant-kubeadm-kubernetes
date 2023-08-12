@@ -14,6 +14,10 @@ alertmanager:
       - secretName: alertmanager-cert-tls-staging
         hosts:
           - alertmanager.monitor.maxxx.dev
+    annotations:       
+      # add an annotation indicating the issuer to use.
+      cert-manager.io/cluster-issuer: letsencrypt-issuer-staging
+      kubernetes.io/ingress.class: nginx      
        
 
 ## Using default values from https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
@@ -35,7 +39,11 @@ grafana:
     tls:
       - secretName: grafana-cert-tls-staging
         hosts:
-          - grafana.monitor.maxxx.dev    
+          - grafana.monitor.maxxx.dev  
+    annotations:       
+      # add an annotation indicating the issuer to use.
+      cert-manager.io/cluster-issuer: letsencrypt-issuer-staging
+      kubernetes.io/ingress.class: nginx
 
 ## Deploy a Prometheus instance
 ##
@@ -56,4 +64,8 @@ prometheus:
     tls:
       - secretName: grafana-cert-tls-staging
         hosts:
-          - prometheus.monitor.maxxx.dev      
+          - prometheus.monitor.maxxx.dev  
+    annotations:       
+      # add an annotation indicating the issuer to use.
+      cert-manager.io/cluster-issuer: letsencrypt-issuer-staging
+      kubernetes.io/ingress.class: nginx          
