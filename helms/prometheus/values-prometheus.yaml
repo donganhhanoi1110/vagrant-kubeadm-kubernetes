@@ -9,7 +9,12 @@ alertmanager:
     hosts:
       - alertmanager.monitor.maxxx.dev
     paths:
-      - /    
+      - /
+    tls:
+      - secretName: alertmanager-cert-tls-staging
+        hosts:
+          - alertmanager.monitor.maxxx.dev
+       
 
 ## Using default values from https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
 ##
@@ -26,7 +31,11 @@ grafana:
     hosts:
       - grafana.monitor.maxxx.dev
     paths:
-      - /  
+      - /
+    tls:
+      - secretName: grafana-cert-tls-staging
+        hosts:
+          - grafana.monitor.maxxx.dev    
 
 ## Deploy a Prometheus instance
 ##
@@ -43,4 +52,8 @@ prometheus:
     hosts:
       - prometheus.monitor.maxxx.dev
     paths:
-      - /    
+      - /
+    tls:
+      - secretName: grafana-cert-tls-staging
+        hosts:
+          - prometheus.monitor.maxxx.dev      
