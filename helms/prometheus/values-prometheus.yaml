@@ -8,12 +8,14 @@ alertmanager:
     ##
     hosts:
       - alertmanager.monitor.maxxx.dev
+      - alertmanager.maxxx.dev
     paths:
       - /
     tls:
       - secretName: alertmanager-cert-tls-prod
         hosts:
           - alertmanager.monitor.maxxx.dev
+          - alertmanager.maxxx.dev
     annotations:       
       # add an annotation indicating the issuer to use.
       cert-manager.io/cluster-issuer: letsencrypt-issuer-prod
@@ -34,12 +36,14 @@ grafana:
     #   - grafana.domain.com
     hosts:
       - grafana.monitor.maxxx.dev
+      - grafana.maxxx.dev
     paths:
       - /
     tls:
       - secretName: grafana-cert-tls-prod
         hosts:
           - grafana.monitor.maxxx.dev  
+          - grafana.maxxx.dev
     annotations:       
       # add an annotation indicating the issuer to use.
       cert-manager.io/cluster-issuer: letsencrypt-issuer-prod
@@ -59,12 +63,14 @@ prometheus:
     #   - prometheus.domain.com
     hosts:
       - prometheus.monitor.maxxx.dev
+      - prometheus.maxxx.dev  
     paths:
       - /
     tls:
       - secretName: prometheus-cert-tls-prod
         hosts:
-          - prometheus.monitor.maxxx.dev  
+          - prometheus.monitor.maxxx.dev
+          - prometheus.maxxx.dev    
     annotations:       
       # add an annotation indicating the issuer to use.
       cert-manager.io/cluster-issuer: letsencrypt-issuer-prod
