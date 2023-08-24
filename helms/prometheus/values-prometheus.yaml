@@ -2,19 +2,18 @@
 ## ref: https://prometheus.io/docs/alerting/alertmanager/
 ##
 alertmanager:
+  enabled: false
   ingress:
     enabled: true
     ## Hosts must be provided if Ingress is enabled.
     ##
     hosts:
-      - alertmanager.monitor.maxxx.dev
       - alertmanager.maxxx.dev
     paths:
       - /
     tls:
       - secretName: alertmanager-cert-tls-prod
         hosts:
-          - alertmanager.monitor.maxxx.dev
           - alertmanager.maxxx.dev
     annotations:       
       # add an annotation indicating the issuer to use.
@@ -25,6 +24,7 @@ alertmanager:
 ## Using default values from https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
 ##
 grafana:
+  enabled: false
   ingress:
     ## If true, Grafana Ingress will be created
     ##
@@ -35,23 +35,48 @@ grafana:
     # hosts:
     #   - grafana.domain.com
     hosts:
-      - grafana.monitor.maxxx.dev
       - grafana.maxxx.dev
     paths:
       - /
     tls:
       - secretName: grafana-cert-tls-prod
         hosts:
-          - grafana.monitor.maxxx.dev  
           - grafana.maxxx.dev
     annotations:       
       # add an annotation indicating the issuer to use.
       cert-manager.io/cluster-issuer: letsencrypt-issuer-prod
       kubernetes.io/ingress.class: nginx
 
+kubeApiServer:
+  enabled: false
+
+kubelet:
+  enabled: false
+
+kubeControllerManager:
+  enabled: false
+
+coreDns:
+  enabled: false
+
+kubeEtcd:
+  enabled: false
+
+kubeScheduler:
+  enabled: false
+
+kubeProxy:
+  enabled: false
+
 ## Deploy a Prometheus instance
 ##
 prometheus:
+  prometheusSpec:
+    remoteWrite:
+      url: https://xxx/api/prom/push
+      basicAuth:
+        username:
+        password:
   ingress:
     ## If true, Grafana Ingress will be created
     ##
@@ -62,14 +87,12 @@ prometheus:
     # hosts:
     #   - prometheus.domain.com
     hosts:
-      - prometheus.monitor.maxxx.dev
       - prometheus.maxxx.dev  
     paths:
       - /
     tls:
       - secretName: prometheus-cert-tls-prod
         hosts:
-          - prometheus.monitor.maxxx.dev
           - prometheus.maxxx.dev    
     annotations:       
       # add an annotation indicating the issuer to use.
