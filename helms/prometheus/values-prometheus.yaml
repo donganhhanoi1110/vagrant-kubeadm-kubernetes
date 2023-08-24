@@ -73,10 +73,15 @@ kubeProxy:
 prometheus:
   prometheusSpec:
     remoteWrite:
-      url: https://xxx/api/prom/push
-      basicAuth:
-        username:
-        password:
+      - url: https://xxx/api/prom/push
+        basicAuth:
+          username:
+            #below is your secretname / key, please check crd-prometheuses.yaml
+            name: grafana-cloud
+            key: username
+          password:
+            name: grafana-cloud
+            key: password
   ingress:
     ## If true, Grafana Ingress will be created
     ##

@@ -11,3 +11,22 @@
 helm install monitoring -f values-prometheus.yaml kube-prometheus-stack --create-namespace -n monitoring
 ## Upgrade
 helm upgrade monitoring -f values-prometheus.yaml kube-prometheus-stack --create-namespace -n monitoring
+## create secret for grafana cloud:
+* kubectl create secret generic grafana-cloud --from-literal=username=yourUsername --from-literal=password=yourSecret --dry-run=client -oyaml > grafana-cloud-secret.yaml
+* k apply -f grafana-cloud-secret.yaml -n monitoring 
+
+Get info from https://grafana.com/orgs/maxxn9x/hosted-metrics/1152374#sending-metrics
+```yaml
+prometheus:
+  prometheusSpec:
+    remoteWrite:
+      - url: https://xxx/api/prom/push
+        basicAuth:
+          username:
+            #below is your secretname / key, please check crd-prometheuses.yaml
+            name: grafana-cloud
+            key: username
+          password:
+            name: grafana-cloud
+            key: password
+```
