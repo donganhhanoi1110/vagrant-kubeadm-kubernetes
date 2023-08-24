@@ -48,13 +48,13 @@ grafana:
       kubernetes.io/ingress.class: nginx
 
 kubeApiServer:
-  enabled: false
+  enabled: true
 
 kubelet:
-  enabled: false
+  enabled: true
 
 kubeControllerManager:
-  enabled: false
+  enabled: true
 
 coreDns:
   enabled: false
@@ -66,12 +66,13 @@ kubeScheduler:
   enabled: false
 
 kubeProxy:
-  enabled: false
+  enabled: true
 
 ## Deploy a Prometheus instance
 ##
 prometheus:
   prometheusSpec:
+    scrapeInterval: 60s
     remoteWrite:
       - url: https://xxx/api/prom/push
         basicAuth:
