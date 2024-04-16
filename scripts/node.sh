@@ -17,6 +17,7 @@ NODENAME=$(hostname -s)
 kubectl label node $(hostname -s) node-role.kubernetes.io/worker=worker
 EOF
 
+echo "worker node done"
 #install longhorn StorageClass
-sudo mkdir -p /data/longhorn-storage
-sudo apt install open-iscsi
+#sudo mkdir -p /data/longhorn-storage
+#sudo apt install open-iscsi
