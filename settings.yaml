@@ -19,8 +19,8 @@ network:
 nodes:
   disk: 70GB
   control:
-    cpu: 2
-    memory: 4096
+    cpu: 6
+    memory: 8192
   workers:
     count: 1
     cpu: 8
