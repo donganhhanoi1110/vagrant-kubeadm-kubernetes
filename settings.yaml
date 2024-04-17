@@ -19,10 +19,10 @@ network:
 nodes:
   disk: 70GB
   control:
-    cpu: 6
-    memory: 8192
+    cpu: 10
+    memory: 13312
   workers:
-    count: 1
+    count: 0
     cpu: 8
     memory: 12288
 # Mount additional shared folders from the host into each virtual machine.
