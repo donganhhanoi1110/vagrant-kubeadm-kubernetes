@@ -1,0 +1,309 @@
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/proxy-body-size: 512m
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/affinity-mode: "persistent"
+    nginx.ingress.kubernetes.io/session-cookie-name: "SRSESSIONID"
+    nginx.ingress.kubernetes.io/session-cookie-max-age: "3600"
+  hosts:
+    - host: author.swissre-dev.maxxx.dev
+      paths:
+        - path: /
+          instance: author
+    - host: public.swissre-dev.maxxx.dev
+      paths:
+        - path: /
+          instance: public
+  tls:
+    - hosts:
+        - author.swissre-dev.maxxx.dev
+        - public.swissre-dev.maxxx.dev
+      secretName: swissre-dev-swissre-webpre-tls
+image:
+  pullSecrets:
+    - name: gitlab
+  pullPolicy: Always
+magnoliaAuthor:
+  replicas: 1
+  restartPolicy: Always
+  redeploy: true
+  contextPath: /
+  webarchive:
+    repository: registry.magnolia-platform.com/minh.nguyen/swissre-webpre/magnolia-webapp
+    tag: "d079b449"
+  bootstrap:
+    password: "superuser!@Corp"
+  env:
+    - name: instance
+      value: "author"
+    - name: deployment
+      value: swissre-dev
+    - name: magnolia.superuser.enabled
+      value: "true"
+    - name: magnolia.superuser.password
+      value: "Mgnl@123"
+    - name: magnolia.bootstrap.license.owner
+      value: "paas@magnolia-platform.com"
+    - name: magnolia.bootstrap.license.key
+      value: "LS0tLS1CRUdJTiBQR1AgTUVTU0FHRS0tLS0tClZlcnNpb246IEJDUEcgdjEuNTgKCm93SjRuRzFUVFdnVU1SVGVicXZnU05XRGVxZ1d0eFR4WUxMTWJsMmxsVkZMRWFtQ1BWakZIOFJtcytrWWRwSU0KU1dhM0xWNFdSWW9JZWhXcUNLMkNCNnNnVmZEZ29ZaUNXMUFFOWRhREJ5MUl2ZlNnb0lpWkdkdmR4Wjd5OHIyZgpmTzk3THpkYm01UEpwdU5QWng1MlhFMzRUZFZaa2wvUFhPNTVGQk91U0g3aHp1L093WUNrZWdNM1pXZFRkcTRuClovZGs3VlRmNFJPRHFheWR6Vm9sSWhVVlhEbm45cVl6YVJ2c1M5dHArNXdseXB4SXgwZElIV0xJNWNLakNQb2UKMHNOQ3NqUVd6Q0lqUHBWSW0xUW5yQVB0Ym1obkxDWUtnVWVVUTdnbTBwZFVFYUNvSnBBeVg0b1NnVmh3VHJBVwpFbmkwUkxEd1J3SEtRMDJVcHR3Rm1veG9pRDJrRkIybU9Db2VZOUtFdXB4R2dMa1R5WkVIUXlyS2xQZE1DNzd3CmdRcGNKTEZrUUNGRHdYZ3hBU2FQa2RBd1oyUm9JVHhWRndHWEhjQzBhVmdMZ0JnYUV4eXFyaHBaR0xjRkNvZ1oKUERyeW83eEFwRW1TUlJKeWh5alFnc1dVVVVIa0NVU0c0NmltV0FGWENOZXJCMHljWU9hbE91RC9NckN1alZYOQpNU2dBUm9ZMnhBRUx2RUJCYXBSMzQ4R0FNc2tyL3lLUnRTNGIzQTJhTkhpS2dxTWlrbnIxUElYOG1teVVLeTBEClpxU0xuQllwUkdOcVdJR2FDYzBhREJNVmJoenlWZ2hjOEJFdTF1U0lyOExYbE5HeHFHcU1HTjFqQXdkS2gzTXQKSUkxaVpFV2dtajcvaXE1c2x4VXVvbkl5dG0xYjR4TXR5YVprWXUyYVpQaERFdGE2VGN0ZmFHcThKWEYzYU1zcgpWbTBSRDhxUDlqLy91dkJuK3NuOGhxNmw2UnMvWmw0OEk5dmFqeDdjTVRGM3NueWtkYUNpZS9mSWphV1hIVDkzCmZ4bjRYbkd1VC9aZmVaMi9kR3JnV1ArbjZ1eXQ1clBWN20vVjAzMU9aWEV4OS9GQSs5dXB6U3AzZnZMKzViYkoKeXZhNWE3L2VmM2hzbmRrNXYydm9UZkZ6cHNya3UzdHRuVnU3bDI3L0JmTjRnUDA9Cj12eVk4Ci0tLS0tRU5EIFBHUCBNRVNTQUdFLS0tLS0K"
+    - name: magnolia.yaml.envsubst
+      value: "true"
+  setenv:
+    memory:
+      maxPercentage: 80
+  resources:
+    requests:
+      memory: 6Gi
+    limits:
+      memory: 6Gi
+  livenessProbe:
+    enabled: true
+    path: "/.rest/status"
+  db:
+    tag: 15.4-alpine
+    persistence:
+      size: "20Gi"
+    contentsync:
+      enabled: true
+    restore:
+      enabled: False
+    backup:
+      enabled: True
+      env:
+        - name: MGNLBACKUP_PG_DATA
+          value: "/db/data"
+        - name: MGNLBACKUP_USE_PG_WAL
+          value: "true"
+        - name: MGNLBACKUP_SYNC_DIR
+          value: "/archive"
+        - name: MGNLBACKUP_NO_STDOUT
+          value: "true"
+        - name: MGNLBACKUP_LOGLEVEL
+          value: "debug"
+        - name: MGNLBACKUP_HERITAGE
+          value: "magnolia-backup"
+        - name: MGNLBACKUP_BUCKET
+          value: "swissre-webpre-backup-bucket"
+        - name: MGNLBACKUP_PREFIX
+          value: "swissre-dev/author"
+        - name: MGNLBACKUP_ADDRESS
+          value: "0.0.0.0:9999"
+        - name: MGNLBACKUP_CRON
+          value: "0 3 * * *"
+        - name: MGNLBACKUP_KEEPDAYS
+          value: "30"
+        - name: MGNLBACKUP_S3_ENDPOINT
+          value: "s3.ap-southeast-1.amazonaws.com"
+        - name: MGNLBACKUP_S3_REGION
+          value: "ap-southeast-1"
+        - name: MGNLBACKUP_S3_ACCESSKEY
+          valueFrom:
+            secretKeyRef:
+              name: s3-backup-key
+              key: accesskey
+        - name: MGNLBACKUP_S3_SECRETKEY
+          valueFrom:
+            secretKeyRef:
+              name: s3-backup-key
+              key: secretkey
+        - name: MGNLBACKUP_TAGS_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: MGNLBACKUP_TAGS_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: MGNLBACKUP_TAGS_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: MGNLBACKUP_TAGS_RELEASE
+          value: swissre-dev
+  catalinaExtraEnv:
+    magnolia.content.bootstrap.dir: '/mgnl-home/modules/bootstraps'
+    magnolia.content.bootstrap.createTasks: onchange
+    magnolia.yaml.envsubst: 'true'
+magnoliaPublic:
+  redirects:
+    enabled: true
+  replicas: 1
+  restartPolicy: Always
+  contextPath: /
+  webarchive:
+    repository: registry.magnolia-platform.com/minh.nguyen/swissre-webpre/magnolia-webapp
+    tag: "d079b449"
+  bootstrap:
+    password: "superuser!@Corp"
+  env:
+    - name: instance
+      value: "public"
+    - name: deployment
+      value: swissre-dev
+    - name: magnolia.superuser.enabled
+      value: "true"
+    - name: magnolia.superuser.password
+      value: "Mgnl@123"
+    - name: magnolia.bootstrap.license.owner
+      value: "paas@magnolia-platform.com"
+    - name: magnolia.bootstrap.license.key
+      value: "LS0tLS1CRUdJTiBQR1AgTUVTU0FHRS0tLS0tClZlcnNpb246IEJDUEcgdjEuNTgKCm93SjRuRzFUVFdnVU1SVGVicXZnU05XRGVxZ1d0eFR4WUxMTWJsMmxsVkZMRWFtQ1BWakZIOFJtcytrWWRwSU0KU1dhM0xWNFdSWW9JZWhXcUNLMkNCNnNnVmZEZ29ZaUNXMUFFOWRhREJ5MUl2ZlNnb0lpWkdkdmR4Wjd5OHIyZgpmTzk3THpkYm01UEpwdU5QWng1MlhFMzRUZFZaa2wvUFhPNTVGQk91U0g3aHp1L093WUNrZWdNM1pXZFRkcTRuClovZGs3VlRmNFJPRHFheWR6Vm9sSWhVVlhEbm45cVl6YVJ2c1M5dHArNXdseXB4SXgwZElIV0xJNWNLakNQb2UKMHNOQ3NqUVd6Q0lqUHBWSW0xUW5yQVB0Ym1obkxDWUtnVWVVUTdnbTBwZFVFYUNvSnBBeVg0b1NnVmh3VHJBVwpFbmkwUkxEd1J3SEtRMDJVcHR3Rm1veG9pRDJrRkIybU9Db2VZOUtFdXB4R2dMa1R5WkVIUXlyS2xQZE1DNzd3CmdRcGNKTEZrUUNGRHdYZ3hBU2FQa2RBd1oyUm9JVHhWRndHWEhjQzBhVmdMZ0JnYUV4eXFyaHBaR0xjRkNvZ1oKUERyeW83eEFwRW1TUlJKeWh5alFnc1dVVVVIa0NVU0c0NmltV0FGWENOZXJCMHljWU9hbE91RC9NckN1alZYOQpNU2dBUm9ZMnhBRUx2RUJCYXBSMzQ4R0FNc2tyL3lLUnRTNGIzQTJhTkhpS2dxTWlrbnIxUElYOG1teVVLeTBEClpxU0xuQllwUkdOcVdJR2FDYzBhREJNVmJoenlWZ2hjOEJFdTF1U0lyOExYbE5HeHFHcU1HTjFqQXdkS2gzTXQKSUkxaVpFV2dtajcvaXE1c2x4VXVvbkl5dG0xYjR4TXR5YVprWXUyYVpQaERFdGE2VGN0ZmFHcThKWEYzYU1zcgpWbTBSRDhxUDlqLy91dkJuK3NuOGhxNmw2UnMvWmw0OEk5dmFqeDdjTVRGM3NueWtkYUNpZS9mSWphV1hIVDkzCmZ4bjRYbkd1VC9aZmVaMi9kR3JnV1ArbjZ1eXQ1clBWN20vVjAzMU9aWEV4OS9GQSs5dXB6U3AzZnZMKzViYkoKeXZhNWE3L2VmM2hzbmRrNXYydm9UZkZ6cHNya3UzdHRuVnU3bDI3L0JmTjRnUDA9Cj12eVk4Ci0tLS0tRU5EIFBHUCBNRVNTQUdFLS0tLS0K"
+    - name: magnolia.yaml.envsubst
+      value: "true"
+  setenv:
+    memory:
+      maxPercentage: 60
+  resources:
+    requests:
+      memory: 6Gi
+    limits:
+      memory: 6Gi
+  livenessProbe:
+    enabled: true
+    path: "/.rest/status"
+  db:
+    tag: 15.4-alpine
+    persistence:
+      size: "20Gi"
+    contentsync:
+      enabled: true
+    restore:
+      enabled: False
+    backup:
+      enabled: True
+      env:
+        - name: MGNLBACKUP_PG_DATA
+          value: "/db/data"
+        - name: MGNLBACKUP_USE_PG_WAL
+          value: "true"
+        - name: MGNLBACKUP_SYNC_DIR
+          value: "/archive"
+        - name: MGNLBACKUP_NO_STDOUT
+          value: "true"
+        - name: MGNLBACKUP_LOGLEVEL
+          value: "debug"
+        - name: MGNLBACKUP_HERITAGE
+          value: "magnolia-backup"
+        - name: MGNLBACKUP_BUCKET
+          value: "swissre-webpre-backup-bucket"
+        - name: MGNLBACKUP_PREFIX
+          value: "swissre-dev/public"
+        - name: MGNLBACKUP_ADDRESS
+          value: "0.0.0.0:9999"
+        - name: MGNLBACKUP_CRON
+          value: "0 3 * * *"
+        - name: MGNLBACKUP_KEEPDAYS
+          value: "30"
+        - name: MGNLBACKUP_S3_ENDPOINT
+          value: "s3.eu-central-1.amazonaws.com"
+        - name: MGNLBACKUP_S3_REGION
+          value: "eu-central-1"
+        - name: MGNLBACKUP_S3_ACCESSKEY
+          valueFrom:
+            secretKeyRef:
+              name: s3-backup-key
+              key: accesskey
+        - name: MGNLBACKUP_S3_SECRETKEY
+          valueFrom:
+            secretKeyRef:
+              name: s3-backup-key
+              key: secretkey
+        - name: MGNLBACKUP_TAGS_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: MGNLBACKUP_TAGS_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: MGNLBACKUP_TAGS_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: MGNLBACKUP_TAGS_RELEASE
+          value: swissre-dev
+  catalinaExtraEnv:
+    magnolia.content.bootstrap.dir: '/mgnl-home/modules/bootstraps'
+    magnolia.content.bootstrap.createTasks: onchange
+    magnolia.yaml.envsubst: 'true'
+# Additional jars which should be loaded into tomcat can be specified here.
+jars:
+  - name: jmx-exporter
+    repository: registry.gitlab.com/mironet/magnolia-jar
+    tag: jmx_prometheus_javaagent-0.13.0
+    env:
+      - name: INIT_DEST
+        value: /extraLibs/
+    initScript: /init.sh
+sharedDb:
+  enabled: true
+  workspaces:
+    - marketplace-submissions
+  db:
+    #    be careful here. PROD is still tag: 12.8, we only apply 15.4-alpine when PROD db is upgraded.
+    tag: 15.4-alpine
+    # do not migrate shared DB
+    migrate: False
+    persistence:
+      size: "20Gi"
+    contentsync:
+      # look like helm chart does not create the required mtls secret for sharedDb
+      enabled: False
+    restore:
+      enabled: False
+    backup:
+      enabled: True
+      env:
+        - name: MGNLBACKUP_PG_DATA
+          value: "/db/data"
+        - name: MGNLBACKUP_USE_PG_WAL
+          value: "true"
+        - name: MGNLBACKUP_SYNC_DIR
+          value: "/archive"
+        - name: MGNLBACKUP_NO_STDOUT
+          value: "true"
+        - name: MGNLBACKUP_LOGLEVEL
+          value: "debug"
+        - name: MGNLBACKUP_HERITAGE
+          value: "magnolia-backup"
+        - name: MGNLBACKUP_BUCKET
+          value: "swissre-webpre-backup-bucket"
+        - name: MGNLBACKUP_PREFIX
+          value: "swissre-dev/shared"
+        - name: MGNLBACKUP_ADDRESS
+          value: "0.0.0.0:9999"
+        - name: MGNLBACKUP_CRON
+          value: "0 3 * * *"
+        - name: MGNLBACKUP_KEEPDAYS
+          value: "30"
+        - name: MGNLBACKUP_S3_ENDPOINT
+          value: "s3.ap-southeast-1.amazonaws.com"
+        - name: MGNLBACKUP_S3_REGION
+          value: "ap-southeast-1"
+        - name: MGNLBACKUP_S3_ACCESSKEY
+          valueFrom:
+            secretKeyRef:
+              name: s3-backup-key
+              key: accesskey
+        - name: MGNLBACKUP_S3_SECRETKEY
+          valueFrom:
+            secretKeyRef:
+              name: s3-backup-key
+              key: secretkey
+        - name: MGNLBACKUP_TAGS_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: MGNLBACKUP_TAGS_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: MGNLBACKUP_TAGS_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: MGNLBACKUP_TAGS_RELEASE
+          value: swissre-dev
