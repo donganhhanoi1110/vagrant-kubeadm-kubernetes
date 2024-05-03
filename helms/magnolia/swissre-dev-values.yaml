@@ -9,24 +9,25 @@ ingress:
     nginx.ingress.kubernetes.io/session-cookie-name: "SRSESSIONID"
     nginx.ingress.kubernetes.io/session-cookie-max-age: "3600"
   hosts:
-    - host: author.swissre-dev.maxxx.dev
+    - host: author-swissre-dev.maxxx.dev
       paths:
         - path: /
           instance: author
-    - host: public.swissre-dev.maxxx.dev
+    - host: public-swissre-dev.maxxx.dev
       paths:
         - path: /
           instance: public
   tls:
     - hosts:
-        - author.swissre-dev.maxxx.dev
-        - public.swissre-dev.maxxx.dev
+        - author-swissre-dev.maxxx.dev
+        - public-swissre-dev.maxxx.dev
       secretName: swissre-dev-swissre-webpre-tls
 image:
   pullSecrets:
     - name: gitlab
   pullPolicy: Always
 magnoliaAuthor:
+  rescueModeDX: False
   replicas: 1
   restartPolicy: Always
   redeploy: true
@@ -35,7 +36,10 @@ magnoliaAuthor:
     repository: registry.magnolia-platform.com/minh.nguyen/swissre-webpre/magnolia-webapp
     tag: "d079b449"
   bootstrap:
-    password: "superuser!@Corp"
+    username: "superuser"
+    password: "superuser"
+    instructions: ""
+    extraEnv: []
   env:
     - name: instance
       value: "author"
@@ -43,12 +47,10 @@ magnoliaAuthor:
       value: swissre-dev
     - name: magnolia.superuser.enabled
       value: "true"
-    - name: magnolia.superuser.password
-      value: "Mgnl@123"
     - name: magnolia.bootstrap.license.owner
-      value: "paas@magnolia-platform.com"
+      value: "training@magnolia-cms.com"
     - name: magnolia.bootstrap.license.key
-      value: "LS0tLS1CRUdJTiBQR1AgTUVTU0FHRS0tLS0tClZlcnNpb246IEJDUEcgdjEuNTgKCm93SjRuRzFUVFdnVU1SVGVicXZnU05XRGVxZ1d0eFR4WUxMTWJsMmxsVkZMRWFtQ1BWakZIOFJtcytrWWRwSU0KU1dhM0xWNFdSWW9JZWhXcUNLMkNCNnNnVmZEZ29ZaUNXMUFFOWRhREJ5MUl2ZlNnb0lpWkdkdmR4Wjd5OHIyZgpmTzk3THpkYm01UEpwdU5QWng1MlhFMzRUZFZaa2wvUFhPNTVGQk91U0g3aHp1L093WUNrZWdNM1pXZFRkcTRuClovZGs3VlRmNFJPRHFheWR6Vm9sSWhVVlhEbm45cVl6YVJ2c1M5dHArNXdseXB4SXgwZElIV0xJNWNLakNQb2UKMHNOQ3NqUVd6Q0lqUHBWSW0xUW5yQVB0Ym1obkxDWUtnVWVVUTdnbTBwZFVFYUNvSnBBeVg0b1NnVmh3VHJBVwpFbmkwUkxEd1J3SEtRMDJVcHR3Rm1veG9pRDJrRkIybU9Db2VZOUtFdXB4R2dMa1R5WkVIUXlyS2xQZE1DNzd3CmdRcGNKTEZrUUNGRHdYZ3hBU2FQa2RBd1oyUm9JVHhWRndHWEhjQzBhVmdMZ0JnYUV4eXFyaHBaR0xjRkNvZ1oKUERyeW83eEFwRW1TUlJKeWh5alFnc1dVVVVIa0NVU0c0NmltV0FGWENOZXJCMHljWU9hbE91RC9NckN1alZYOQpNU2dBUm9ZMnhBRUx2RUJCYXBSMzQ4R0FNc2tyL3lLUnRTNGIzQTJhTkhpS2dxTWlrbnIxUElYOG1teVVLeTBEClpxU0xuQllwUkdOcVdJR2FDYzBhREJNVmJoenlWZ2hjOEJFdTF1U0lyOExYbE5HeHFHcU1HTjFqQXdkS2gzTXQKSUkxaVpFV2dtajcvaXE1c2x4VXVvbkl5dG0xYjR4TXR5YVprWXUyYVpQaERFdGE2VGN0ZmFHcThKWEYzYU1zcgpWbTBSRDhxUDlqLy91dkJuK3NuOGhxNmw2UnMvWmw0OEk5dmFqeDdjTVRGM3NueWtkYUNpZS9mSWphV1hIVDkzCmZ4bjRYbkd1VC9aZmVaMi9kR3JnV1ArbjZ1eXQ1clBWN20vVjAzMU9aWEV4OS9GQSs5dXB6U3AzZnZMKzViYkoKeXZhNWE3L2VmM2hzbmRrNXYydm9UZkZ6cHNya3UzdHRuVnU3bDI3L0JmTjRnUDA9Cj12eVk4Ci0tLS0tRU5EIFBHUCBNRVNTQUdFLS0tLS0K"
+      value: "LS0tLS1CRUdJTiBQR1AgTUVTU0FHRS0tLS0tClZlcnNpb246IEJDUEcgdjEuNTgKCm93SjRuRzJTVDJnVFFSVEdreGlsMlZBcGV1cXBDUjdkU1RkTlNiR3dwRkRFSXFRb1JEeFVsTW51WkIyeU03UE8Kek1aRVVkVFdJbmd3SGhRcXZZZ0lLbFZSL0llQ1VDelVQd2Z4b2hWRUtuZ1NvVVhvUVUvT1ptblNReSs3anpmdgorMzdmdnAxbTk1WllMRHIrN09uOTlIVEVpMzZZdjFkT0VvZTZMcllRRlFqOWVmTjNWK200bnlwQ25zb09wckxHCmNDNDduQnRLamU0dHBRYU1nVUd0aHJqQWpBcHpJcC9KWmd4OUtHTmtqQW1ObmFTSW01SkRUREYxUmdoMEtITXgKQkJZUkdZc1JEZFU5ektGVVNqT3dBVVllNUF5Tk1OdDNrVEFSbFloN0hBdWtFOGlyU0NvUEFIM0pTRXNDd2liVApYVnhERnZNYXVub1N4QzJrUzFTWHdIS2hFTGlDcmRhMExxRHlyREIxRE5SWU9PY3c1cmdJUUFyZGhzU1cwREVWCmt2dEVrVVBScHR5T2t6TDFPbTdxODVTUWhYU3V3amdVaDJnc0VjREU0NndXd0NsRmxtUmNoellyYjRSM3FuVkwKeVpncmxLOUNzMDJ6NkxBTUpCSkJWN2NoQVNMWGVwVWIxRVpjUTNhTEw4d05VMjNJTVE5YVZYM0RqanNsVUVrcgpTQVIvRkxydE1LSEE4b1VNdG14RENjTU84eVFtK0ZRclQ5aHBKKzBFRFE5VXRsYWhCUnNSWnRZd0RPM1NiRHdXCmpVVzJiWTBGMXl5aUpYclc3K0hOZkR4eW9WQW9vdWJYbjJkUFR5NGRYSDV3OTlhK2wrTmozNDhtRHl4MjdhbkgKbjh4ZVAxTXlraXU3bmF2OTNRdm5kenE5cnhJekN5dUw1MWh6YlRUOW92a3huWmo2ZDAxY25qK3gvTHM0dGFOUQpuZHZ2OTE1OHVEcTlXdnA4bzcveDZKRCs1ZDN6dnJkOXY1Qjh2MzFrN3M3WTY4ZUh1NWF1OUh6N2RQdkhwRFBECmpxejlCeWtqT0VZPQo9aVk1cgotLS0tLUVORCBQR1AgTUVTU0FHRS0tLS0tCg=="
     - name: magnolia.yaml.envsubst
       value: "true"
   setenv:
@@ -128,6 +130,7 @@ magnoliaAuthor:
     magnolia.content.bootstrap.createTasks: onchange
     magnolia.yaml.envsubst: 'true'
 magnoliaPublic:
+  rescueModeDX: False
   redirects:
     enabled: true
   replicas: 1
@@ -137,7 +140,10 @@ magnoliaPublic:
     repository: registry.magnolia-platform.com/minh.nguyen/swissre-webpre/magnolia-webapp
     tag: "d079b449"
   bootstrap:
-    password: "superuser!@Corp"
+    username: "superuser"
+    password: "superuser"
+    instructions: ""
+    extraEnv: []
   env:
     - name: instance
       value: "public"
@@ -145,12 +151,10 @@ magnoliaPublic:
       value: swissre-dev
     - name: magnolia.superuser.enabled
       value: "true"
-    - name: magnolia.superuser.password
-      value: "Mgnl@123"
     - name: magnolia.bootstrap.license.owner
-      value: "paas@magnolia-platform.com"
+      value: "training@magnolia-cms.com"
     - name: magnolia.bootstrap.license.key
-      value: "LS0tLS1CRUdJTiBQR1AgTUVTU0FHRS0tLS0tClZlcnNpb246IEJDUEcgdjEuNTgKCm93SjRuRzFUVFdnVU1SVGVicXZnU05XRGVxZ1d0eFR4WUxMTWJsMmxsVkZMRWFtQ1BWakZIOFJtcytrWWRwSU0KU1dhM0xWNFdSWW9JZWhXcUNLMkNCNnNnVmZEZ29ZaUNXMUFFOWRhREJ5MUl2ZlNnb0lpWkdkdmR4Wjd5OHIyZgpmTzk3THpkYm01UEpwdU5QWng1MlhFMzRUZFZaa2wvUFhPNTVGQk91U0g3aHp1L093WUNrZWdNM1pXZFRkcTRuClovZGs3VlRmNFJPRHFheWR6Vm9sSWhVVlhEbm45cVl6YVJ2c1M5dHArNXdseXB4SXgwZElIV0xJNWNLakNQb2UKMHNOQ3NqUVd6Q0lqUHBWSW0xUW5yQVB0Ym1obkxDWUtnVWVVUTdnbTBwZFVFYUNvSnBBeVg0b1NnVmh3VHJBVwpFbmkwUkxEd1J3SEtRMDJVcHR3Rm1veG9pRDJrRkIybU9Db2VZOUtFdXB4R2dMa1R5WkVIUXlyS2xQZE1DNzd3CmdRcGNKTEZrUUNGRHdYZ3hBU2FQa2RBd1oyUm9JVHhWRndHWEhjQzBhVmdMZ0JnYUV4eXFyaHBaR0xjRkNvZ1oKUERyeW83eEFwRW1TUlJKeWh5alFnc1dVVVVIa0NVU0c0NmltV0FGWENOZXJCMHljWU9hbE91RC9NckN1alZYOQpNU2dBUm9ZMnhBRUx2RUJCYXBSMzQ4R0FNc2tyL3lLUnRTNGIzQTJhTkhpS2dxTWlrbnIxUElYOG1teVVLeTBEClpxU0xuQllwUkdOcVdJR2FDYzBhREJNVmJoenlWZ2hjOEJFdTF1U0lyOExYbE5HeHFHcU1HTjFqQXdkS2gzTXQKSUkxaVpFV2dtajcvaXE1c2x4VXVvbkl5dG0xYjR4TXR5YVprWXUyYVpQaERFdGE2VGN0ZmFHcThKWEYzYU1zcgpWbTBSRDhxUDlqLy91dkJuK3NuOGhxNmw2UnMvWmw0OEk5dmFqeDdjTVRGM3NueWtkYUNpZS9mSWphV1hIVDkzCmZ4bjRYbkd1VC9aZmVaMi9kR3JnV1ArbjZ1eXQ1clBWN20vVjAzMU9aWEV4OS9GQSs5dXB6U3AzZnZMKzViYkoKeXZhNWE3L2VmM2hzbmRrNXYydm9UZkZ6cHNya3UzdHRuVnU3bDI3L0JmTjRnUDA9Cj12eVk4Ci0tLS0tRU5EIFBHUCBNRVNTQUdFLS0tLS0K"
+      value: "LS0tLS1CRUdJTiBQR1AgTUVTU0FHRS0tLS0tClZlcnNpb246IEJDUEcgdjEuNTgKCm93SjRuRzJTVDJnVFFSVEdreGlsMlZBcGV1cXBDUjdkU1RkTlNiR3dwRkRFSXFRb1JEeFVsTW51WkIyeU03UE8Kek1aRVVkVFdJbmd3SGhRcXZZZ0lLbFZSL0llQ1VDelVQd2Z4b2hWRUtuZ1NvVVhvUVUvT1ptblNReSs3anpmdgorMzdmdnAxbTk1WllMRHIrN09uOTlIVEVpMzZZdjFkT0VvZTZMcllRRlFqOWVmTjNWK200bnlwQ25zb09wckxHCmNDNDduQnRLamU0dHBRYU1nVUd0aHJqQWpBcHpJcC9KWmd4OUtHTmtqQW1ObmFTSW01SkRUREYxUmdoMEtITXgKQkJZUkdZc1JEZFU5ektGVVNqT3dBVVllNUF5Tk1OdDNrVEFSbFloN0hBdWtFOGlyU0NvUEFIM0pTRXNDd2liVApYVnhERnZNYXVub1N4QzJrUzFTWHdIS2hFTGlDcmRhMExxRHlyREIxRE5SWU9PY3c1cmdJUUFyZGhzU1cwREVWCmt2dEVrVVBScHR5T2t6TDFPbTdxODVTUWhYU3V3amdVaDJnc0VjREU0NndXd0NsRmxtUmNoellyYjRSM3FuVkwKeVpncmxLOUNzMDJ6NkxBTUpCSkJWN2NoQVNMWGVwVWIxRVpjUTNhTEw4d05VMjNJTVE5YVZYM0RqanNsVUVrcgpTQVIvRkxydE1LSEE4b1VNdG14RENjTU84eVFtK0ZRclQ5aHBKKzBFRFE5VXRsYWhCUnNSWnRZd0RPM1NiRHdXCmpVVzJiWTBGMXl5aUpYclc3K0hOZkR4eW9WQW9vdWJYbjJkUFR5NGRYSDV3OTlhK2wrTmozNDhtRHl4MjdhbkgKbjh4ZVAxTXlraXU3bmF2OTNRdm5kenE5cnhJekN5dUw1MWh6YlRUOW92a3huWmo2ZDAxY25qK3gvTHM0dGFOUQpuZHZ2OTE1OHVEcTlXdnA4bzcveDZKRCs1ZDN6dnJkOXY1Qjh2MzFrN3M3WTY4ZUh1NWF1OUh6N2RQdkhwRFBECmpxejlCeWtqT0VZPQo9aVk1cgotLS0tLUVORCBQR1AgTUVTU0FHRS0tLS0tCg=="
     - name: magnolia.yaml.envsubst
       value: "true"
   setenv:
