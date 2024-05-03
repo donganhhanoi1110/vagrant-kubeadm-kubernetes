@@ -27,6 +27,7 @@ image:
     - name: gitlab
   pullPolicy: Always
 magnoliaAuthor:
+  enabled: False
   rescueModeDX: False
   replicas: 1
   restartPolicy: Always
@@ -48,7 +49,7 @@ magnoliaAuthor:
     - name: magnolia.superuser.enabled
       value: "true"
     - name: magnolia.bootstrap.license.owner
-      value: "training@magnolia-cms.com"
+      value: "@magnolia-cms.com"
     - name: magnolia.bootstrap.license.key
       value: "LS0tLS1CRUdJTiBQR1AgTUVTU0FHRS0tLS0tClZlcnNpb246IEJDUEcgdjEuNTgKCm93SjRuRzJTVDJnVFFSVEdreGlsMlZBcGV1cXBDUjdkU1RkTlNiR3dwRkRFSXFRb1JEeFVsTW51WkIyeU03UE8Kek1aRVVkVFdJbmd3SGhRcXZZZ0lLbFZSL0llQ1VDelVQd2Z4b2hWRUtuZ1NvVVhvUVUvT1ptblNReSs3anpmdgorMzdmdnAxbTk1WllMRHIrN09uOTlIVEVpMzZZdjFkT0VvZTZMcllRRlFqOWVmTjNWK200bnlwQ25zb09wckxHCmNDNDduQnRLamU0dHBRYU1nVUd0aHJqQWpBcHpJcC9KWmd4OUtHTmtqQW1ObmFTSW01SkRUREYxUmdoMEtITXgKQkJZUkdZc1JEZFU5ektGVVNqT3dBVVllNUF5Tk1OdDNrVEFSbFloN0hBdWtFOGlyU0NvUEFIM0pTRXNDd2liVApYVnhERnZNYXVub1N4QzJrUzFTWHdIS2hFTGlDcmRhMExxRHlyREIxRE5SWU9PY3c1cmdJUUFyZGhzU1cwREVWCmt2dEVrVVBScHR5T2t6TDFPbTdxODVTUWhYU3V3amdVaDJnc0VjREU0NndXd0NsRmxtUmNoellyYjRSM3FuVkwKeVpncmxLOUNzMDJ6NkxBTUpCSkJWN2NoQVNMWGVwVWIxRVpjUTNhTEw4d05VMjNJTVE5YVZYM0RqanNsVUVrcgpTQVIvRkxydE1LSEE4b1VNdG14RENjTU84eVFtK0ZRclQ5aHBKKzBFRFE5VXRsYWhCUnNSWnRZd0RPM1NiRHdXCmpVVzJiWTBGMXl5aUpYclc3K0hOZkR4eW9WQW9vdWJYbjJkUFR5NGRYSDV3OTlhK2wrTmozNDhtRHl4MjdhbkgKbjh4ZVAxTXlraXU3bmF2OTNRdm5kenE5cnhJekN5dUw1MWh6YlRUOW92a3huWmo2ZDAxY25qK3gvTHM0dGFOUQpuZHZ2OTE1OHVEcTlXdnA4bzcveDZKRCs1ZDN6dnJkOXY1Qjh2MzFrN3M3WTY4ZUh1NWF1OUh6N2RQdkhwRFBECmpxejlCeWtqT0VZPQo9aVk1cgotLS0tLUVORCBQR1AgTUVTU0FHRS0tLS0tCg=="
     - name: magnolia.yaml.envsubst
@@ -130,6 +131,7 @@ magnoliaAuthor:
     magnolia.content.bootstrap.createTasks: onchange
     magnolia.yaml.envsubst: 'true'
 magnoliaPublic:
+  enabled: True
   rescueModeDX: False
   redirects:
     enabled: true
@@ -152,7 +154,7 @@ magnoliaPublic:
     - name: magnolia.superuser.enabled
       value: "true"
     - name: magnolia.bootstrap.license.owner
-      value: "training@magnolia-cms.com"
+      value: "@magnolia-cms.com"
     - name: magnolia.bootstrap.license.key
       value: "LS0tLS1CRUdJTiBQR1AgTUVTU0FHRS0tLS0tClZlcnNpb246IEJDUEcgdjEuNTgKCm93SjRuRzJTVDJnVFFSVEdreGlsMlZBcGV1cXBDUjdkU1RkTlNiR3dwRkRFSXFRb1JEeFVsTW51WkIyeU03UE8Kek1aRVVkVFdJbmd3SGhRcXZZZ0lLbFZSL0llQ1VDelVQd2Z4b2hWRUtuZ1NvVVhvUVUvT1ptblNReSs3anpmdgorMzdmdnAxbTk1WllMRHIrN09uOTlIVEVpMzZZdjFkT0VvZTZMcllRRlFqOWVmTjNWK200bnlwQ25zb09wckxHCmNDNDduQnRLamU0dHBRYU1nVUd0aHJqQWpBcHpJcC9KWmd4OUtHTmtqQW1ObmFTSW01SkRUREYxUmdoMEtITXgKQkJZUkdZc1JEZFU5ektGVVNqT3dBVVllNUF5Tk1OdDNrVEFSbFloN0hBdWtFOGlyU0NvUEFIM0pTRXNDd2liVApYVnhERnZNYXVub1N4QzJrUzFTWHdIS2hFTGlDcmRhMExxRHlyREIxRE5SWU9PY3c1cmdJUUFyZGhzU1cwREVWCmt2dEVrVVBScHR5T2t6TDFPbTdxODVTUWhYU3V3amdVaDJnc0VjREU0NndXd0NsRmxtUmNoellyYjRSM3FuVkwKeVpncmxLOUNzMDJ6NkxBTUpCSkJWN2NoQVNMWGVwVWIxRVpjUTNhTEw4d05VMjNJTVE5YVZYM0RqanNsVUVrcgpTQVIvRkxydE1LSEE4b1VNdG14RENjTU84eVFtK0ZRclQ5aHBKKzBFRFE5VXRsYWhCUnNSWnRZd0RPM1NiRHdXCmpVVzJiWTBGMXl5aUpYclc3K0hOZkR4eW9WQW9vdWJYbjJkUFR5NGRYSDV3OTlhK2wrTmozNDhtRHl4MjdhbkgKbjh4ZVAxTXlraXU3bmF2OTNRdm5kenE5cnhJekN5dUw1MWh6YlRUOW92a3huWmo2ZDAxY25qK3gvTHM0dGFOUQpuZHZ2OTE1OHVEcTlXdnA4bzcveDZKRCs1ZDN6dnJkOXY1Qjh2MzFrN3M3WTY4ZUh1NWF1OUh6N2RQdkhwRFBECmpxejlCeWtqT0VZPQo9aVk1cgotLS0tLUVORCBQR1AgTUVTU0FHRS0tLS0tCg=="
     - name: magnolia.yaml.envsubst
