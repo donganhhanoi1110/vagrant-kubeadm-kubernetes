@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: magnolia-postgresql
+  namespace: migration
+  labels:
+    app: magnolia-postgresql
+type: Opaque
+data:
+  postgresql-password: ODcxMDM3OGY4Mzc4MzkxNThmZTMzODNmZjM5OWIwY2I2ZGExNjNjZTA3MjQ4Y2FmNTFiZjc2MmQ4ODM2
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: magnolia-postgresql
+  namespace: migration
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: magnolia-postgresql
+  template:
+    metadata:
+      labels:
+        app: magnolia-postgresql
+    spec:
+      volumes:
+        - name: data
+          emptyDir: {}
+#          persistentVolumeClaim:
+#            claimName: migration-task-pvc
+      containers:
+        - name: postgres
+          image: postgres:14.4
+          env:
+            - name: POSTGRES_USER
+              value: magnolia
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: magnolia-postgresql
+                  key: postgresql-password
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "2Gi"
+              cpu: "2"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: magnolia-postgresql
+  namespace: migration
+spec:
+  selector:
+    app: magnolia-postgresql
+  ports:
+    - port: 5432
