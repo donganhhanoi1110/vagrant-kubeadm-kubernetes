@@ -1,0 +1,40 @@
+addressability:
+  external:
+    domainName: solr.maxxx.dev
+    ingressTLSTermination:
+      tlsSecret: solr-maxxx-dev
+    method: Ingress
+    useExternalAddress: false
+dataStorage:
+  type: persistent
+image:
+  tag: 8.11.3
+ingressOptions:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-issuer-prod
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/auth-secret: solr-basic-auth
+    nginx.ingress.kubernetes.io/auth-type: basic
+podOptions:
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: technology
+                  operator: In
+                  values:
+                    - solr-cloud
+                - key: solr-cloud
+                  operator: In
+                  values:
+                    - solr
+            topologyKey: kubernetes.io/hostname
+          weight: 100
+solrOptions:
+  javaMemory: -Xms300m -Xmx640m
+zk:
+  provided:
+    image:
+      tag: 0.2.15
