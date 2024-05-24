@@ -1,6 +1,6 @@
 addressability:
   external:
-    domainName: solr.maxxx.dev
+    domainName: maxxx.dev
     ingressTLSTermination:
       tlsSecret: solr-maxxx-dev
     method: Ingress

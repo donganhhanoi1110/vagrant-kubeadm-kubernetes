@@ -48,6 +48,10 @@ zk:
       tag: 0.2.15
 ```
 * command:
-  * helm upgrade -i solr apache-solr/solr --version 0.8.1 -f ./values.yaml --create-namespace -n solr --devel --timeout 24h
+  * install solr operator: (https://apache.github.io/solr-operator/docs/running-the-operator.html)
+    * helm repo add apache-solr https://solr.apache.org/charts && helm repo update
+    * kubectl create -f https://solr.apache.org/operator/downloads/crds/v0.8.1/all-with-dependencies.yaml
+    * helm install solr-operator apache-solr/solr-operator --version 0.8.1 -n solr
+    * helm upgrade -i solr apache-solr/solr --version 0.8.1 -f ./values.yaml --create-namespace -n solr
 * we can set the config via API: https://solr.apache.org/guide/8_11/configsets-api.html
 * set the schema file in: managed-schema.xml
