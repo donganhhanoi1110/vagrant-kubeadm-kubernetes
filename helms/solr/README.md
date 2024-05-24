@@ -47,6 +47,7 @@ zk:
     image:
       tag: 0.2.15
 ```
-
+* command:
+  * helm upgrade -i solr apache-solr/solr --version 0.8.1 -f ./values.yaml --create-namespace -n solr --devel --timeout 24h
 * we can set the config via API: https://solr.apache.org/guide/8_11/configsets-api.html
 * set the schema file in: managed-schema.xml
